@@ -2,12 +2,12 @@
 
 namespace GradeBook.GradeBooks
 {
-    public class StandardGradeBook : BaseGradeBook
+    public class RankedGradeBook : BaseGradeBook
     {
-        public StandardGradeBook(string name) : base(name)
+        public RankedGradeBook(string name) : base(name)
         {
 
-            base.Type = GradeBookType.Standard;
+            base.Type = GradeBookType.Ranked;
 
         }
     }
