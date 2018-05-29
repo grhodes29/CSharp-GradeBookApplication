@@ -1,4 +1,5 @@
 ﻿using GradeBook.Enums;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,7 +35,7 @@ namespace GradeBook.GradeBooks
 
             if (Students.Count < 5)
             {
-                throw new System.InvalidOperationException();
+                throw new System.InvalidOperationException("Ranked grading required 5 or more students.");
             }
 
             // top 20% for class return 'A'
@@ -47,71 +48,87 @@ namespace GradeBook.GradeBooks
 
             // bottom 20% for class return 'F'
 
-            int _numberOfStudentsInGrade = (int)(Students.Count * .2);
-            int _fractionPart = Students.Count - (5 * _numberOfStudentsInGrade);
+            //int _numberOfStudentsInGrade = (int)(Students.Count * .2);
+            //int _fractionPart = Students.Count - (5 * _numberOfStudentsInGrade);
 
-            List<Distribution> _listOfGradeDistribution = new List<Distribution>();
-            _listOfGradeDistribution.Add(new Distribution { LetterGrade = 'A', NumberInGrade = _numberOfStudentsInGrade });
-            _listOfGradeDistribution.Add(new Distribution { LetterGrade = 'B', NumberInGrade = _numberOfStudentsInGrade });
-            _listOfGradeDistribution.Add(new Distribution { LetterGrade = 'C', NumberInGrade = _numberOfStudentsInGrade });
-            _listOfGradeDistribution.Add(new Distribution { LetterGrade = 'D', NumberInGrade = _numberOfStudentsInGrade });
-            _listOfGradeDistribution.Add(new Distribution { LetterGrade = 'F', NumberInGrade = _numberOfStudentsInGrade });
+            //List<Distribution> _listOfGradeDistribution = new List<Distribution>();
+            //_listOfGradeDistribution.Add(new Distribution { LetterGrade = 'A', NumberInGrade = _numberOfStudentsInGrade });
+            //_listOfGradeDistribution.Add(new Distribution { LetterGrade = 'B', NumberInGrade = _numberOfStudentsInGrade });
+            //_listOfGradeDistribution.Add(new Distribution { LetterGrade = 'C', NumberInGrade = _numberOfStudentsInGrade });
+            //_listOfGradeDistribution.Add(new Distribution { LetterGrade = 'D', NumberInGrade = _numberOfStudentsInGrade });
+            //_listOfGradeDistribution.Add(new Distribution { LetterGrade = 'F', NumberInGrade = _numberOfStudentsInGrade });
 
-            foreach (var grade in _listOfGradeDistribution)
-            {
+            //foreach (var grade in _listOfGradeDistribution)
+            //{
 
-                grade.NumberInGrade = grade.NumberInGrade + 1;
-                _fractionPart--;
+            //    grade.NumberInGrade = grade.NumberInGrade + 1;
+            //    _fractionPart--;
 
-                if (_fractionPart == 0)
-                    break;
+            //    if (_fractionPart == 0)
+            //        break;
 
-            }
-
-
-            List<Distribution> _listOfRank = new List<Distribution>();
-
-            int _rankcounter = 1;
-            foreach (var item in _listOfGradeDistribution)
-            {
-
-                for (int i = 0; i < item.NumberInGrade; i++)
-                {
-                    _listOfRank.Add(new Distribution { Rank = _rankcounter, LetterGrade = item.LetterGrade });
-                    _rankcounter++;
-                }
-
-            }
+            //}
 
 
-            SortedList<double, Student> _sortedList = new SortedList<double, Student>();
+            //List<Distribution> _listOfRank = new List<Distribution>();
 
-            foreach (var item in Students)
-            {
-                _sortedList.Add(item.AverageGrade, item);
-            }
+            //int _rankcounter = 1;
+            //foreach (var item in _listOfGradeDistribution)
+            //{
 
-            var _sortedListReversed = _sortedList.Reverse().ToList();
+            //    for (int i = 0; i < item.NumberInGrade; i++)
+            //    {
+            //        _listOfRank.Add(new Distribution { Rank = _rankcounter, LetterGrade = item.LetterGrade });
+            //        _rankcounter++;
+            //    }
 
-            int _rank = 0;
-
-            foreach (var item in _sortedListReversed)
-            {
-
-                if (item.Value.AverageGrade == averageGrade)
-                {
-
-                    break;
-                }
-
-                _rank++;
-            }
+            //}
 
 
-            var _someChar = _listOfRank[_rank].LetterGrade;
+            //SortedList<double, Student> _sortedList = new SortedList<double, Student>();
+
+            //foreach (var item in Students)
+            //{
+            //    _sortedList.Add(item.AverageGrade, item);
+            //}
+
+            //var _sortedListReversed = _sortedList.Reverse().ToList();
+
+            //int _rank = 0;
+
+            //foreach (var item in _sortedListReversed)
+            //{
+
+            //    if (item.Value.AverageGrade == averageGrade)
+            //        break;
 
 
-            return _someChar;
+            //    _rank++;
+            //}
+
+
+            //var _someChar = _listOfRank[_rank].LetterGrade;
+
+
+
+            var threshold = (int)Math.Ceiling(Students.Count * 0.2);
+            var grades = Students.OrderByDescending(e => e.AverageGrade).Select(e => e.AverageGrade).ToList();
+            Char answer = 'F';
+
+
+            if (grades[threshold - 1] <= averageGrade)
+                answer = 'A';
+            else if (grades[(threshold * 2) - 1] <= averageGrade)
+                answer = 'B';
+            else if (grades[(threshold * 3) - 1] <= averageGrade)
+                answer = 'C';
+            else if (grades[(threshold * 4) - 1] <= averageGrade)
+                answer = 'D';
+            else answer = 'F';
+
+
+
+            return answer;
         }
 
 
