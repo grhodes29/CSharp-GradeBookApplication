@@ -140,7 +140,7 @@ namespace GradeBook.GradeBooks
                    
             }
 
-            if (studentType == StudentType.DualEnrolled || studentType == StudentType.Honors) {
+            if   (IsWeighted && (studentType == StudentType.DualEnrolled || studentType == StudentType.Honors)) {
                 _gpa++;
             }
 
